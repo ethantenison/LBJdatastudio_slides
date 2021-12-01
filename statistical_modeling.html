@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistical Modeling in R + tidymodels</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Ethan Tenison | Project Manager for Data Initiatives, UT Austin - RGK Center" />
+    <meta name="author" content="Matt Worthington | Sr. Project Manager for Data Initiatives, UT Austin - LBJ" />
+    <meta name="date" content="2021-10-22" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="assets/extra.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Statistical Modeling in R + <code>tidymodels</code>
+## Oct 22 Session | LBJ Data Studio
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#e2f1fc' size=1px width=1100px>
+</html>
+### <span style="color:#005f86; font-weight:500">Ethan Tenison</span> | Project Manager for Data Initiatives, UT Austin - RGK Center
+### <span style="color:#005f86; font-weight:500">Matt Worthington</span> | Sr. Project Manager for Data Initiatives, UT Austin - LBJ
+### <span style="color:#bf5700; font-weight:300">October 22, 2021</span>
+
+---
+
+class: middle
+
+.pull-left[
+
+* .orange[**Personal Background**]: Born and raised in the Rio Grande Valley. I've lived in Austin for 11 years.
+
+* .orange[**Education**]: Government and Spanish BA, Global Policy Studies MA with a certificate in Data Science for Policy Analysis and the Statistical Modeling Portfolio 
+
+* .orange[**Role at RGK**]: data science consulting with the CONNECT Program, program evaluation, data visualization and dashboarding for RGK clients, algorithm development
+]
+
+.pull-right[
+
+
+&lt;img src="assets/images/AISD.png" width="500px" /&gt;
+
+&lt;br/&gt;
+
+&lt;img src="assets/images/RGK.png" width="500px" /&gt;
+
+
+]
+
+---
+class: inverse, center, middle
+background-image: url("assets/images/modeling2.png")
+background-size: contain
+
+---
+class: middle
+
+
+.pull-left[
+### R's Stats Focus 
+
+* .orange[**R Origin**]: R was first developed as a statistical language
+
+* .orange[**R strengths**]: Advanced statistical modeling 
+
+* .orange[**Built-in functions**]: linear regression, ANOVA, t-tests  
+]
+
+.pull-right[
+![R Icon](assets/images/Rlogo.png)
+]
+
+
+---
+class: middle
+
+# What is Statistical Modeling? 
+
+### **Statistical modeling** is the process of applying statistical analysis to a dataset. A statistical model is a mathematical representation (or mathematical model) of observed data.
+
+
+.tl.footnote-small[
+([Credit: Tim Stobierski](https://www.northeastern.edu/graduate/blog/statistical-modeling-for-data-analysis/))
+]
+
+---
+
+# Examples of Statistical Models
+
+.pull-left[
+* Linear Regression 
+* Logistic Regression
+* ANOVA
+* Tree-based methods
+* Discriminant Analysis 
+* Principal Component Analysis 
+* Clustering Methods 
+
+]
+
+.pull-right[
+* Bayesian Methods 
+* Matching Methods
+* Regression Discontinuity 
+* Difference-in-difference
+* Synthetic Control 
+* etc. etc. 
+
+]
+
+--
+
+# .orange[**SO MANY MODELS**] 
+---
+class: inverse, middle
+
+### Statistics is Easier than you think
+* Statistics gives meaning to math 
+
+* Having a stats professors that does applied work is essential
+
+* LBJ has numerous applied statisticians that can make learning exciting
+
+
+
+
+---
+class: middle
+
+### Statistics vs Machine Learning
+
+.pull-left[
+
+* **BOTH STATISTICS**
+
+* The boundary is fuzzy
+
+* ML usually refers to **predictive** statistical models 
+
+* ML is (usually) **NOT** interested in casual inference 
+]
+
+.pull-right[
+
+&lt;img src="assets/images/Stats-vs-ML.jpg" width="500px" /&gt;
+
+
+]
+
+---
+class: inverse, middle
+
+### Two Main Categories in Machine Learning 
+
+.pull-left[
+
+
+.orange[**Supervised Learning**]:
+* Predictive modeling! 
+* Uses labeled datasets 
+* Think regression. 
+
+
+.orange[**Unsupervised Learning**]: 
+* Data discovery
+* Uses unlabeled data to discover patterns 
+* Clustering algorithms 
+]
+
+.pull-right[
+
+
+&lt;img src="assets/images/supervised-vs-unsupervised-ml.png" width="500px" /&gt;
+
+
+]
+
+
+
+---
+class: inverse, middle
+
+### Supervised learning (AKA Predictive Analytics)
+
+.pull-left[
+
+* .orange[**Regression**]: use an algorithm to accurately assign test data into specific categories, such as separating apples from oranges
+
+* .orange[**Classification**]: uses an algorithm to understand the relationship between dependent and independent variables. Regression models are helpful for predicting numerical values based on different data points
+
+.tl.footnote-small[
+([Definitions from: IBM](https://www.ibm.com/cloud/blog/supervised-vs-unsupervised-learning))
+]
+]
+
+.pull-right[
+
+
+
+&lt;img src="assets/images/class_reg.png" width="500px" /&gt;
+
+
+]
+---
+class: middle, center 
+
+#### The Russian nesting dolls of this workshop~
+
+&lt;img src="assets/images/nesting_dolls.jpg" width="700px" /&gt;
+
+
+---
+class: inverse,center
+
+&lt;img src="assets/images/jobs.jpg" width="600px" /&gt;
+
+.tl.footnote-small[
+([Credit: Visual Capitalist](https://www.visualcapitalist.com/the-20-fastest-growing-jobs-in-the-next-decade/))
+]
+---
+
+### Basic Statistics in base R
+
+.pull-left[
+
+
+
+```r
+mean(penguins$bill_length_mm, na.rm = TRUE)
+```
+
+```
+[1] 43.92193
+```
+
+```r
+median(penguins$bill_length_mm, na.rm = TRUE)
+```
+
+```
+[1] 44.45
+```
+
+```r
+max(penguins$bill_length_mm, na.rm = TRUE)
+```
+
+```
+[1] 59.6
+```
+
+```r
+quantile(penguins$bill_length_mm, c(.25,.50,.75), na.rm = TRUE)
+```
+
+```
+   25%    50%    75% 
+39.225 44.450 48.500 
+```
+.tl.footnote-small[
+([Credit: palmerpenguins](https://allisonhorst.github.io/palmerpenguins/))
+]
+
+]
+
+.pull-right[
+
+&lt;img src="assets/images/palmer.png" width="350px" /&gt;
+
+]
+
+
+
+
+---
+class: middle
+
+### Correlation and Linear Models 
+
+* **Correlation**: Correlation is a statistical measure that expresses the extent to which two variables are linearly related (meaning they change together at a constant rate). It’s a common tool for describing simple relationships without making a statement about cause and effect.
+
+* **How is correlation measured?**
+The sample correlation coefficient, r, quantifies the strength of the relationship. Correlations are also tested for statistical significance.
+
+
+
+```r
+#Correlation
+cor(penguins$bill_length_mm, penguins$body_mass_g,
+    method = "pearson", use = "complete.obs")
+```
+
+```
+[1] 0.5951098
+```
+
+---
+
+
+.pull-left[
+
+### Linear Regression 
+
+* The aim of linear regression is to model a continuous variable Y as a mathematical function of one or more X variable(s), so that we can use this regression model to predict the Y when only the X is known.
+
+* This mathematical equation can be generalized as follows:
+$$y = \beta_0 + \beta_1 X + \varepsilon $$
+
+* where, β1 is the intercept and β2 is the slope. Collectively, they are called regression coefficients. ϵ is the error term, the part of Y the regression model is unable to explain.
+
+
+]
+
+.pull-right[
+### Simple Linear Regression 
+
+![R Icon](assets/images/simple_linear_reg2.png)
+
+.tl.footnote-small[
+([Credit: r-statistics.co](http://r-statistics.co/Linear-Regression.html))
+]
+
+]
+
+---
+class: inverse, middle
+
+# All the code needed for basic linear regression in R!
+
+
+
+```r
+#Linear Model AKA Linear Regression 
+lm(body_mass_g ~ flipper_length_mm + bill_length_mm, data = penguins)
+```
+
+```
+
+Call:
+lm(formula = body_mass_g ~ flipper_length_mm + bill_length_mm, 
+    data = penguins)
+
+Coefficients:
+      (Intercept)  flipper_length_mm     bill_length_mm  
+        -5736.897             48.145              6.047  
+```
+
+* In R `~` defines a relationship being the dependent and independent variables
+
+* Use `+` to list all of the independent variables  
+---
+class:middle
+
+### Problems with base R stats
+
+* inconsistent naming conventions
+
+* Statistics has advanced **SO** much since 1995
+
+* As a result, most people rely on statistical packages in R
+
+---
+class: inverse, center, middle
+
+# Tidymodels to the rescue! 
+
+&lt;img src="assets/images/tidymodels.png" width="350px" /&gt;
+
+
+---
+
+class: inverse, center, middle
+background-size: contain
+background-image: url("assets/images/tidymodels2.png")
+
+---
+class: inverse, center, middle
+
+### Follow Tidymodels creator Julia Silge! 
+
+&lt;img src="assets/images/julia_silge.jpg" width="500px" /&gt;
+
+
+---
+class: inverse, middle
+
+### Hypothesis generation vs. hypothesis confirmation
+
+
+Modeling can be used to generate hypotheses or confirm them. We do this by separating our data into training and test sets
++ Observations can either go into the training or test sets, not both. 
+
++ You can use an observation in your training data as much as you'd like to explore, but you can only use the test data when you're ready to confirm your hypothesis 
+
+Depending on the size of your data set you can separate it into 75% training and 25% test. 
+
+
+---
+
+### Using `rsample` to create test/train datasets
+
+
+```r
+library(tidymodels) # for the parsnip package, along with the rest of tidymodels
+library(dotwhisker) # for visualizing regression results
+
+# Fix the random numbers by setting the seed 
+# This enables the analysis to be reproducible when random numbers are used 
+set.seed(27)
+# Put 3/4 of the data into the training set 
+data_split &lt;- initial_split(penguins, prop = 3/4)
+
+# Create data frames for the two sets:
+train_data &lt;- training(data_split)
+test_data  &lt;- testing(data_split)
+```
+
+.pull-left[
+
+
+```r
+glimpse(train_data, width = 50)
+```
+
+```
+Rows: 258
+Columns: 8
+$ species           &lt;fct&gt; Gentoo, Adelie, Gentoo~
+$ island            &lt;fct&gt; Biscoe, Torgersen, Bis~
+$ bill_length_mm    &lt;dbl&gt; 50.5, 39.6, 45.2, 43.2~
+$ bill_depth_mm     &lt;dbl&gt; 15.9, 17.2, 16.4, 14.5~
+$ flipper_length_mm &lt;int&gt; 222, 196, 223, 208, 19~
+$ body_mass_g       &lt;int&gt; 5550, 3550, 5950, 4450~
+$ sex               &lt;fct&gt; male, female, male, fe~
+$ year              &lt;int&gt; 2008, 2008, 2008, 2008~
+```
+]
+
+.pull-right[
+
+```r
+glimpse(test_data, width = 50)
+```
+
+```
+Rows: 86
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie~
+$ island            &lt;fct&gt; Torgersen, Torgersen, ~
+$ bill_length_mm    &lt;dbl&gt; 40.3, 38.9, 38.6, 34.6~
+$ bill_depth_mm     &lt;dbl&gt; 18.0, 17.8, 21.2, 21.1~
+$ flipper_length_mm &lt;int&gt; 195, 181, 191, 198, 18~
+$ body_mass_g       &lt;int&gt; 3250, 3625, 3800, 4400~
+$ sex               &lt;fct&gt; female, female, male, ~
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007~
+```
+]
+
+
+
+---
+
+### How to pick what model to use? 
+
+.pull-left[
+
+
+1. Determine the shape of your data
+
+2. Create a formula based on what variables are important 
+
+3. Fit your model to the data 
+
+* `body_mass_g ~ bill_length_mm`
+
+]
+
+.pull-right[
+
+
+
+```r
+ggplot(train_data, aes(x = bill_length_mm, y = body_mass_g)) + 
+  geom_point()
+```
+
+&lt;img src="statistical_modeling_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
+
+
+]
+
+--- 
+class: inverse, center, middle
+
+# .orange[**All models are wrong, but some are useful.**]
+
+.tl.footnote-small[
+George Box - Statistician
+]
+
+---
+class: middle, center
+
+
+`body_mass_g ~ bill_length_mm + species`
+
+
+&lt;img src="statistical_modeling_files/figure-html/adv_regression2-1.png" width="504" /&gt;
+
+
+---
+class: inverse, middle
+
+### Build model with parsnip 
+
+1) Set model specification 
+
+```r
+linear_reg()
+```
+
+```
+Linear Regression Model Specification (regression)
+
+Computational engine: lm 
+```
+
+```r
+# Linear Regression Model Specification (regression)
+```
+
+--
+2) Set the engine 
+
+
+```r
+linear_reg() %&gt;% 
+  set_engine("lm")
+```
+
+```
+Linear Regression Model Specification (regression)
+
+Computational engine: lm 
+```
+
+```r
+#&gt; Computational engine: lm
+```
+
+
+.tl.footnote-small[
+([tidymodels.org](https://www.tidymodels.org/))
+]
+
+---
+
+### Fit your model 
+
+First save as an object
+
+
+```r
+lm_mod &lt;- 
+  linear_reg() %&gt;% 
+  set_engine("lm")
+```
+
+Then use `fit()` to train your model 
+
+&gt; by adding a dot "." after the ~ we can select all variables as predictors 
+
+
+```r
+lm_fit &lt;- 
+  lm_mod %&gt;% 
+  fit(body_mass_g ~ ., 
+      data = train_data)
+```
+
+---
+### Automatically see the coefficients
+
+
+```r
+lm_fit
+```
+
+```
+parsnip model object
+
+Fit time:  0ms 
+
+Call:
+stats::lm(formula = body_mass_g ~ ., data = data)
+
+Coefficients:
+      (Intercept)   speciesChinstrap      speciesGentoo        islandDream  
+        121994.38            -201.80             945.24              20.11  
+  islandTorgersen     bill_length_mm      bill_depth_mm  flipper_length_mm  
+           -67.53              12.22              61.01              19.67  
+          sexmale               year  
+           389.72             -61.67  
+```
+
+--
+### A little messy!
+
+---
+class: middle, inverse, center 
+
+### Organize your model results with the `tidy()` function
+
+
+```r
+tidy(lm_fit)
+```
+
+```
+# A tibble: 10 x 5
+   term              estimate std.error statistic  p.value
+   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 (Intercept)       121994.   46203.       2.64  8.82e- 3
+ 2 speciesChinstrap    -202.     102.      -1.99  4.81e- 2
+ 3 speciesGentoo        945.     154.       6.15  3.30e- 9
+ 4 islandDream           20.1     64.6      0.311 7.56e- 1
+ 5 islandTorgersen      -67.5     71.8     -0.941 3.48e- 1
+ 6 bill_length_mm        12.2      8.49     1.44  1.51e- 1
+ 7 bill_depth_mm         61.0     23.0      2.66  8.40e- 3
+ 8 flipper_length_mm     19.7      3.37     5.84  1.66e- 8
+ 9 sexmale              390.      54.1      7.20  7.83e-12
+10 year                 -61.7     23.1     -2.67  8.08e- 3
+```
+
+
+---
+class: middle, inverse 
+
+.pull-left[
+
+### See confidence intervals with dot and whisker plot 
+
+
+```r
+tidy(lm_fit) %&gt;% 
+  dwplot(dot_args = list(size = 2, color = "black"),
+         whisker_args = list(color = "black"),
+         vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2))
+```
+
+]
+
+.pull-right[
+
+&lt;img src="statistical_modeling_files/figure-html/dotwhisker2-1.png" width="504" /&gt;
+]
+---
+
+### Prediction 
+
+Predicting the weights of the penguins from the test dataset 
+
+
+```r
+pred &lt;- predict(lm_fit, new_data = test_data)
+
+pred
+```
+
+```
+# A tibble: 86 x 1
+   .pred
+   &lt;dbl&gt;
+ 1 3590.
+ 2 3285.
+ 3 4075.
+ 4 4158.
+ 5 3336.
+ 6 4243.
+ 7 3232.
+ 8 3559.
+ 9 3496.
+10 3913.
+# ... with 76 more rows
+```
+
+---
+
+--- 
+
+### Evaluating Performance 
+
+.pull-left[
+Instantly evaluate if your regression model satisfies all the model assumptions
+
+
+
+```r
+par(mfrow = c(2, 2)) # plot all 4 plots in one plot
+
+plot(lm_fit$fit,  # Select the fit object from the lm_fit list object 
+     pch = 16,    # optional parameters to make points blue
+     col = '#006EA1')
+```
+]
+
+.pull-right[
+
+&lt;img src="statistical_modeling_files/figure-html/model_assumptions2-1.png" width="504" /&gt;
+
+]
+---
+class: center, middle, inverse
+
+### Performance metrics
+
+Use `glance()` to see evaluation metrics for the entire model 
+
+
+```r
+glance(lm_fit)
+```
+
+```
+# A tibble: 1 x 12
+  r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.884         0.880  276.      204. 5.12e-107     9 -1755. 3532. 3570.
+# ... with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+
+---
+class: inverse
+
+### Easily test variable importance
+
+
+```r
+vip(lm_fit)
+```
+
+&lt;img src="statistical_modeling_files/figure-html/vip-1.png" width="504" height="400px" /&gt;
+---
+--- 
+
+### Check for accuracy 
+
+### 1) Bind test results to original test dataset 
+
+
+```r
+test_results &lt;- predict(lm_fit, new_data = test_data) |&gt;
+  bind_cols(test_data)
+
+#View Results
+test_results
+```
+
+```
+# A tibble: 86 x 9
+   .pred species island    bill_length_mm bill_depth_mm flipper_length_mm
+   &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;
+ 1 3590. Adelie  Torgersen           40.3          18                 195
+ 2 3285. Adelie  Torgersen           38.9          17.8               181
+ 3 4075. Adelie  Torgersen           38.6          21.2               191
+ 4 4158. Adelie  Torgersen           34.6          21.1               198
+ 5 3336. Adelie  Torgersen           36.6          17.8               185
+ 6 4243. Adelie  Torgersen           46            21.5               194
+ 7 3232. Adelie  Biscoe              37.8          18.3               174
+ 8 3559. Adelie  Biscoe              35.9          19.2               189
+ 9 3496. Adelie  Biscoe              40.5          17.9               187
+10 3913. Adelie  Dream               40.9          18.9               184
+# ... with 76 more rows, and 3 more variables: body_mass_g &lt;int&gt;, sex &lt;fct&gt;,
+#   year &lt;int&gt;
+```
+
+---
+class: middle
+
+.pull-left[
+
+### 2) Visualize your results 
+
+Test how good your regression results are by comparing the actual value by the predicted value 
+
+
+```r
+ggplot(data = test_results,
+       mapping = aes(x = .pred, y = body_mass_g)) +
+  geom_point(color = '#006EA1') +
+  geom_abline(intercept = 0, slope = 1, color = 'orange') +
+  labs(title = 'Linear Regression Results - Test Set',
+       x = 'Predicted Weight',
+       y = 'Actual Weight')
+```
+
+]
+
+.pull-right[
+&lt;img src="statistical_modeling_files/figure-html/test2-1.png" width="504" /&gt;
+
+]
+---
+
+class: section, left, middle, inverse
+
+# 📚 Resources for R 📚
+
+## Questions? lbjdata.org
+
+#### [#rstats hashtag](https://twitter.com/search?q=%23rstats) on twitter
+#### R For Data Science - [Online Book](https://r4ds.had.co.nz) | [Hard Copy](https://www.oreilly.com/library/view/r-for-data/9781491910382/) | [Slack Community](https://www.rfordatasci.com)
+#### [Tidymodels](https://www.tidymodels.org/) website
+#### [Introduction to Statistical Learning](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) Tidymodels Version
+
+
+---
+
+class: section, center, middle, inverse
+
+# 🙏 Thank you 🙏
+
+## Questions? lbjdata.org
+
+### 📧: matthew.worthington@austin.utexas.edu
+### 🐦: @mrworthington
+### 📧: ethan.tenison@austin.utexas.edu
+### 🐦: @ethantenison
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

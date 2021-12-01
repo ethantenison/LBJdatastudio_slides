@@ -1,0 +1,83 @@
+---
+title: "Geographic Information Systems in `R`"
+subtitle: "Dec 3 Session | LBJ Data Studio<html><div style='float:left'></div><hr color='#e2f1fc' size=1px width=1100px></html>"
+author: 
+- "<span style='color:#005f86; font-weight:500'>Ethan Tenison</span> | Project Manager for Data Initiatives, UT Austin - RGK Center"
+- "<span style='color:#005f86; font-weight:500'>Matt Worthington</span> | Sr. Project Manager for Data Initiatives, UT Austin - LBJ"
+date: '<span style="color:#bf5700; font-weight:300">`r format(Sys.Date(), "%B %d, %Y")`</span>'
+output:
+  xaringan::moon_reader: 
+    lib_dir: libs
+    css: ["xaringan-themer.css","assets/extra.css"]
+    yolo: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      beforeInit: "https://platform.twitter.com/widgets.js"
+      countIncrementalSlides: false
+      ratio: "16:9"
+      navigation:
+        scroll: false # disable slide transitions by scrolling
+
+---
+class: middle
+
+.pull-left[
+
+* .orange[**Personal Background**]: Born and raised in the Rio Grande Valley. I've lived in Austin for 11 years.
+
+* .orange[**Education**]: Government and Spanish BA, Global Policy Studies MA with a certificate in Data Science for Policy Analysis and the Statistical Modeling Portfolio 
+
+* .orange[**Role at RGK**]: data science consulting with the CONNECT Program, program evaluation, data visualization and dashboarding for RGK clients, algorithm development
+]
+
+.pull-right[
+
+
+```{r aisd, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/AISD.png")
+
+```
+
+<br/>
+
+```{r rgk, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/RGK.png")
+```
+
+
+]
+
+---
+class: inverse, center, middle
+background-image: url("assets/images/modeling2.png")
+background-size: contain
+
+---
+
+class: section, left, middle, inverse
+
+# 📚 Resources for R 📚
+
+## Questions? lbjdata.org
+
+#### [#rstats hashtag](https://twitter.com/search?q=%23rstats) on twitter
+#### R For Data Science - [Online Book](https://r4ds.had.co.nz) | [Hard Copy](https://www.oreilly.com/library/view/r-for-data/9781491910382/) | [Slack Community](https://www.rfordatasci.com)
+#### [Tidymodels](https://www.tidymodels.org/) website
+#### [Introduction to Statistical Learning](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/index.html) Tidymodels Version
+
+
+---
+
+class: section, center, middle, inverse
+
+# 🙏 Thank you 🙏
+
+## Questions? lbjdata.org
+
+### 📧: matthew.worthington@austin.utexas.edu
+### 🐦: @mrworthington
+### 📧: ethan.tenison@austin.utexas.edu
+### 🐦: @ethantenison
+
+
