@@ -50,9 +50,98 @@ knitr::include_graphics("assets/images/RGK.png")
 
 ---
 class: inverse, center, middle
-background-image: url("assets/images/modeling2.png")
+background-image: url("assets/images/africa.png")
 background-size: contain
 
+--
+
+# R for Geospatial Anlaysis 
+
+---
+class: middle
+
+# What can you do with R 
+
+.pull-left[
+
+* Static Maps
+
+* Interactive Mapping Applications
+
+* 3D Mapping and lidar integration 
+
+* Geospatial Data Science 
+
+* Transportation Modeling
+
+]
+
+.pull-right[
+
+```{r pitts, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/pittsburg.png")
+```
+
+.tl.footnote-small[
+([Source: Mark Egge](https://towardsdatascience.com/five-essential-skills-for-transportation-data-science-8c4bed72c03e))
+]
+
+]
+
+---
+## Static Maps 
+
+.pull-left[
+
+```{r madrid, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/madrid.jpeg")
+```
+
+
+
+]
+
+.pull-right[
+
+```{r nyc, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/nyc.jpeg")
+```
+
+
+]
+
+---
+class: middle, inverse
+
+## Interactive Mapping Applications
+
+.pull-left[
+* Leaflet 
+
+* Tmap 
+
+* Mapdeck 
+
+* Highcharter
+
+* Plotly (also in Python)
+
+* Shiny integration to create advanced applications
+]
+
+
+.pull-right[
+[Coronary Disease in the United States](https://rpubs.com/tshapiro/coronarydisease)
+
+```{r usa, echo=FALSE, out.width="500px"}
+knitr::include_graphics("assets/images/usa.jpg")
+```
+
+.tl.footnote-small[
+([Source: Tanya Shapiro](https://twitter.com/tanya_shapiro))
+]
+
+]
 ---
 
 class: section, left, middle, inverse
